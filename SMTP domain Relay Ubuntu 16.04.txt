@@ -1,0 +1,48 @@
+#!/bin/bash
+
+docker run --name EMAIL -h "saqistore.com" -id jasonrivers/nagios
+
+
+
+sleep 5
+
+
+
+docker exec EMAIL apt update -y && apt upgrade -y
+
+docker exec EMAIL apt install -y vim
+
+docker exec -it EMAIL bash
+
+#END
+
+#!/bin/bash
+
+echo '[mail.saqistore.com]:25 info@saqistore.com:pakistan!@#$%'  > /etc/postfix/sasl_passwd
+
+postmap /etc/postfix/sasl_passwd
+
+chown root:root /etc/postfix/sasl_passwd /etc/postfix/sasl_passwd.db
+
+chmod 0600 /etc/postfix/sasl_passwd /etc/postfix/sasl_passwd.db
+
+cat /etc/ssl/certs/thawte_Primary_Root_CA.pem | tee -a /etc/postfix/cacert.pem
+
+echo "Asim Here" | mail -s "E-Mail Marketing" -r 'Sky Host<info@saqistore.com>' quickbooks2018@gmail.com
+
+#END
+
+NOTE: Remove  ====> relayhost =
+
+#Place this at the bottom
+
+vim /etc/postfix/main.cf
+
+relayhost = [mail.saqistore.com]:25
+smtp_sasl_auth_enable = yes
+smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+smtp_sasl_security_options = noanonymous
+smtp_tls_CAfile = /etc/postfix/cacert.pem
+smtp_use_tls = yes
+
+

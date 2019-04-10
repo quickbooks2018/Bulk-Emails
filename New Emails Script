@@ -1,0 +1,16 @@
+#!/bin/bash
+
+IFS=$'\n'
+Total=`wc -l emails | awk '{print $1}'`
+
+for LineNum in `seq 1 "$Total"`; do
+FirstNameLastName=`sed -n "$LineNum"p emails| awk '{print $1,$2}'`
+Email=`sed -n "$LineNum"p emails | awk '{print $3}'`
+echo "
+Dear "$FirstNameLastName"
+We Welocme You
+How are you
+Regards
+" | mail -s "E-Mail Marketing" -a ebody.txt -r 'Sky Host<asim@smtp97.biz>' $Email
+
+done

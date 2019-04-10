@@ -1,0 +1,36 @@
+IP Rotation for EXIM in WHM/CPanel
+Description: There are no native features that would allow you to rotate the IP addresses used for sending out email. The option included with CPanel/WHM only allow for the permanent change of the IP addresses used for sending. Below code is use to configure IP rotation.
+
+#!/bin/bash
+# Exim Outgoing IP address rotator
+# The cPanel Admin 24/10/2017
+# Files: /etc/mailipaddrpool: list of IP addresses to use for mail
+
+ipfile=/etc/mailipaddrpool
+curip=$(grep "*:" /etc/mailips |awk '{print $2}')
+
+if [[ "$curip" == "" ]] || ! grep $curip $ipfile >/dev/null ; then
+ curip=$(tail -1 $ipfile)
+fi
+
+nextipct=$(cat $ipfile |grep -A 1 $curip |wc -l)
+
+if [ "$nextipct" == "1" ];then
+ nextip=$(head -1 $ipfile)
+else
+ nextip=$(cat $ipfile |grep -A 1 $curip | tail -1)
+fi
+
+sed '/*:/d' -i /etc/mailips
+sed '/^$/d' -i /etc/mailips
+echo "*: $nextip" >> /etc/mailips
+
+Note: /etc/mailipaddrpool file contains all your IP Addresses as given example:
+192.168.0.1
+192.168.0.2
+192.168.0.3
+192.168.0.4
+Then setup a cron job with the above script to run as your requirement. As it is kind of bash command and mailips file will be written on every cron action, set up the crontab as superuser root by command line with following commands
+#crontab -e (this command will open/create crontab file in edit mode to enter add/edit/remove cron task)
+/bin/bash /etc/scripts/yourscriptfile
+Prior to run bash command, change file permission to execution like chmod filename 777

@@ -1,0 +1,7 @@
+sed command example to print first 10/20 lines
+Type the following sed command to display first 10 lines of a file named “/etc/group”:
+
+sed -n 1,10p /etc/group
+Type the following sed command to display first 20 lines of a file named “/etc/group”:
+
+sed -n 1,20p /etc/group

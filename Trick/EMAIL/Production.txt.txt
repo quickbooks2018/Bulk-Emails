@@ -1,0 +1,25 @@
+#!/bin/bash
+
+IFS=$'\n'
+
+EBODY=`cat body.txt`
+COMMA=","
+Total=`wc -l emails | awk '{print $1}'`
+
+for LineNum in `seq 1 "$Total"`; do
+FirstNameLastName=`sed -n "$LineNum"p emails| awk '{print $1,$2}'`
+Email=`sed -n "$LineNum"p emails | awk '{print $3}'`
+
+sleep 1
+
+echo -e "
+Dear "$FirstNameLastName$COMMA"\n
+
+$EBODY " | mutt -e "set content_type=text/html"  -s "Sky Host Marketing"  -a attach.txt -- "$Email"
+
+echo -e "\nSending emails to $FirstNameLastName $Email\n"
+
+echo "Job Done"
+
+
+#http://www.mutt.org/doc/mutt.1.txt
