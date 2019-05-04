@@ -1,0 +1,7 @@
+docker run --name smtp -e RELAY_HOST='smtp.gmail.com' -e RELAY_PORT='587' -e RELAY_USERNAME='muhammad.asim@YourDomain' -e RELAY_PASSWORD='YourPassword'  -d bytemark/smtp
+
+
+echo 'THIS IS A TEST EMAIL' | mail -s 'Pakistan Zindabad' -r 'muhammad.asim@cloudelligent.com' quickbooks2018@gmail.com
+
+
+https://github.com/BytemarkHosting/docker-smtp
